@@ -4,16 +4,27 @@
 
     
         <h2>Build a Blog</h2>
+        
+        
+        {%if titles|length == 0%}
+        <p>No Blogs yet</p>
+
+        {%else%}
         <ul>
-        {% for title in titles %}
-        <li>
-            <form action="add_title" method="post">
-            {{ blog.title }}
-            <input type="error" name="title_error" value="{{ blog.id }}"/>
+          {% for title in titles %}
+        
+      
+            <form action="add_title" method="post" value=title>
+                <li><h4><a href="/newpost"> {{title.title}}</a></h4><br>
+                <p>{{body}}</p></li>
+
+                
+            <!--<input type="error" name="title_error" value="{{ id }}"/>-->
         
             </form>
-        </li>
-        {% endfor %}
+        
+          {% endfor %}
+        {%endif%}
         </ul>
         
 
@@ -21,19 +32,7 @@
         
         
         
-          {% for title in get_current_titles %}
-            <li>
-              <form action="/ratings" method="post">
-                {{ title.Blog }}
-                <input type="hidden" name="ra" value="{{ movie.id }}"/>
-                <input type="submit" value="I Watched it!"/>
-              </form>
-            </li>
-          {% endfor %}
-        
-        {% if error %}
-          <p class='error'>{{ error }}</p>
-        {% endif %}
+         
         
 {% endblock %}
 

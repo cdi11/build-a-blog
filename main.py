@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 import cgi
 
@@ -12,59 +12,59 @@ class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
-    body = db.Column(db.String(1000))
+    #body = db.Column(db.String(1000))
     
     
-    def __init__(self, name):
-        self.name = name
-        self.read = False
+    def __init__(self, title):
+        self.title = title
+        #self.body = body
 
-    #def __repr__(self):
-        #return '<Title %r>' % self.name
-        #return '<Body %r>' % self.name
+    def __repr__(self):
+        return '<Title %r>' % self.title
+        #return '<Body %r>' % self.body
 
 
-        #def get_curent_titles():
-            #return Title.query.all()
+        def get_curent_titles():
+            return Title.query.all()
 
-        #def get_current_blogs():
-            #return Body.query.all()
+        def get_current_blogs():
+            return Body.query.all()
 
-    #get_current_title = Blog.query.get_all()
-
-@app.route('/')
+   
+@app.route('/', methods=['POST', 'GET'])
 def index():
-    encoded_error = request.args.get("error")
-    return render_template('blog.html')  
-
-
-
-    if request.method == 'POST':
-        new_title = request.form['title']
-        #new_body = request.form['body']
-        #new_blog = Blog('new_title')
-        new_blog_body = Blog(new_title)
-        db.session.add(new_blog_body)
-        db.session.commit()
-        #new_blog_title = request.form['new_title']
-        #new_blog_body = request.form['new_body']
+    
+    titles = Blog.query.all()
+    body = Blog.query.all()
+    return render_template('blog.html', titles=titles)
 
 @app.route("/addpost", methods=['POST', 'GET'])
 def add_post():
-        
+    #title=request.form['title']
+    #if title == " ":
+        #error = 'Please enter a title'
+        #return redirect("/?error=" + error)
+    #else:
+
     return render_template('addpost.html')
 
 
-    #title = Blog(title)
-    #body = Blog(body)
-    #db.session.add(title, body)
-    #db.session.commit()
-    #return render_template('newpost', title=title, body=body)
+  
+
+@app.route("/newpost", methods=['POST', 'GET'])
+def display_post():
+    if request.method == 'POST':
+        blog_title=request.form['title']
+        body=request.form['body']
+        title = Blog(blog_title)
+        #new_body= Blog(blog_body)
+        db.session.add(title)
+        db.session.commit()
+    return render_template('newpost.html', title=title, body=body)
 
 
 
 
-    
 
     
 
