@@ -2,14 +2,14 @@
 
 {% block content %}
 
-<form action="/" method="post">
+<form value={{blog}}>
 <p>
-    <strong>{{title.title}}</strong>
+    <h2><strong>{{blog.title}}</strong></h2>
 </p>
 
 <p>
-    {{body}}
+    {{blog.body}}
 </p>
 
-<input type="submit" value="Post to Blog"/>
+<!--<input type="submit" value="Post to Blog"/>-->
 {% endblock %}
