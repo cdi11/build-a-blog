@@ -31,17 +31,15 @@ class Blog(db.Model):
             return Body.query.all()
 
    
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/')
 def index():
-    if request.method=='POST':
-        title=request.form['title']
-        body=request.form['body']    
-        blogs = Blog.query.all()
-        new_blog = Blog(title, body)
+       
+    #blogs = Blog.query.all()
+        #new_blog = Blog(title, body)
         
          #new_body = Blog(body)
-        db.session.add(new_blog)
-        db.session.commit()  
+        #db.session.add(new_blog)
+        #db.session.commit()  
            
     blogs = Blog.query.all()
     return render_template('blog.html', blogs=blogs)
@@ -50,20 +48,13 @@ def index():
     
 
 @app.route('/post', methods=['POST', 'GET'])
-def new_post():
-    if request.method == "POST":
-        title =request.form['title']
-        body = request.form['body']
-        if (title == ""):
-            title_error = "Please enter title"
-            return render_template("addpost.html", title_error=title_error)
-        if (body == ""):
-            body_error = "Please enter body"
-            return render_template("addpost.html", body_error=body_error)
-        
-        else:
-            return render_template('post.html')
-        #return render_template('post.html', title=title, body=body)
+def display_post():
+    if request.method == 'GET':
+        #blog_id = int(request.form['id']
+        blog_id = (request.args.get('id'))
+        blog = Blog.query.filter_by(id=blog_id).first()
+        if blog_id:
+            return render_template('post.html', blog=blog)
 
 
 
@@ -75,20 +66,33 @@ def add_post():
         body=request.form['body'] 
         
 
-
+    return render_template('addpost.html')
   
 
 @app.route("/newpost", methods=['POST', 'GET'])
-def display_post():
-    if request.method == 'GET':
-        #blog_id = int(request.form['id']
-        blog_id = (request.args.get('id'))
-        blog = Blog.query.filter_by(id=blog_id).first()
-        if blog_id:
+def new_post():
+    title_error =""
+    body_error = ""
+    if request.method == "POST":
+        title =request.form['title']
+        body = request.form['body']
+        if (title == ""):
+            title_error = "Please enter title"
+            return render_template("addpost.html", title_error=title_error)
+        if (body == ""):
+            body_error = "Please enter body"
+            return render_template("addpost.html", body_error=body_error)
+        
+        else:
             
-            
-            return render_template('newpost.html', blog=blog)
-
+            new_blog = Blog(title, body)
+        
+            #new_body = Blog(body)
+            db.session.add(new_blog)
+            db.session.commit()  
+            return render_template('newpost.html', title=title, body=body)
+    
+    return render_template('addpost.html')
 
 
 
